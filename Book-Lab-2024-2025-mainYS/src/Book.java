@@ -8,13 +8,39 @@ public class Book
 {
   public String pigLatin(String word)
   {
-    if (word.substring(0, 1).equals("a") || word.substring(0, 1).equals("e") || word.substring(0, 1).equals("i") || word.substring(0, 1).equals("o") || word.substring(0, 1).equals("u")){
-      return word + "yay";
+    String digits = "0123456789";
+    String vowels = "aeiouy"
+    ;
+    if (word.length() == 0){
+      return word;
     }
-    else{
-      return word.substring(1) + word.substring(0, 1) + "ay";
+    if (digits.contains(word.substring(0, 1))){
+      return word;
+    }
+    else {
+      if (vowels.indexOf(word.substring(0, 1)) >= 0){
+      return word + "yay";
+      }
+      else if (word.length() == 1){
+      return word + "ay";
+      }
+      
+      String first = "";
+      String last = "";
+
+      for (int i = 0; i < word.length()-1; i++){
+        if (vowels.indexOf(word.substring(0, 1)) >= 0){
+          first = word.substring(0, i);
+          last = word.substring(i);
+          
+        }
+        
+      }
+      return last + first + "ay";
     }
   }
+
+
   
   public int endPunctuation(String word)  //return the index of where the punctuation is at the end of a String. If it is all punctuation return 0, if there is no punctuation return -1
   {
@@ -44,7 +70,9 @@ public class Book
       String lastLetter = String.valueOf(Character.toLowerCase(letter));
       convertedWord = firstLetter + convertedWord.substring(2) + lastLetter + "ay";
     }
-    else if (Character.isUpperCase(word.charAt(1))) // use AY
+    else if (Character.isUpperCase(word.charAt(1))){
+      convertedWord = convertedWord.substring(1) + letter + "AY";
+    } // use AY
     else {
       convertedWord = convertedWord.substring(1) + letter + "ay";
     }
@@ -59,4 +87,4 @@ public class Book
 
     return retSentence;
   }
-}  
+}

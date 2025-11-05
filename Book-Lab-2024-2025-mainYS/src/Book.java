@@ -8,36 +8,31 @@ public class Book
 {
   public String pigLatin(String word)
   {
-    String digits = "0123456789";
-    String vowels = "aeiouy"
-    ;
-    if (word.length() == 0){
-      return word;
-    }
-    if (digits.contains(word.substring(0, 1))){
-      return word;
-    }
-    else {
-      if (vowels.indexOf(word.substring(0, 1)) >= 0){
-      return word + "yay";
+    String newWord = "";
+      String vowel = "aeiouy";
+      String numbers = "1234567890";
+      if(word.length()==0){
+         return word;
       }
-      else if (word.length() == 1){
-      return word + "ay";
+      else if (vowel.indexOf(word.substring(0,1))>=0){
+         return word + "yay";
       }
-      
-      String first = "";
-      String last = "";
+      else if(numbers.indexOf(word.substring(0,1))>=0){
+         return word;
+      }
+      else if (word.length()==1){
+         return word+"ay";
+      }
 
-      for (int i = 0; i < word.length()-1; i++){
-        if (vowels.indexOf(word.substring(0, 1)) >= 0){
-          first = word.substring(0, i);
-          last = word.substring(i);
-          
-        }
-        
+      for (int i = 0; i < word.length(); i++){
+         if (vowel.indexOf(word.substring(i, i+1))>=0){
+            String left = word.substring ( 0,i);
+            String right = word.substring (i, word.length());
+            return right+left+"ay";
+            
+         }
       }
-      return last + first + "ay";
-    }
+      return word;
   }
 
 
@@ -51,39 +46,83 @@ public class Book
   public String translateWord(String word)    //to share with class
   {
     String convertedWord = "";
+    String punctuationString = ".?!,;";
+    String vowels = " aeiouyAEIOUY";
 
     boolean punctuation = false;
     int i = 0;
     while (punctuation == false){
-      if (word.charAt(i) == '!' || word.charAt(i) == '.' || word.charAt(i) == '?' || word.charAt(i) == ';' || word.charAt(i) == ','){
+      if (i >= word.length()){
+        convertedWord = word;
+        break;
+      }
+
+      if (punctuationString.indexOf(word.substring(i, i+1))>=0){
         convertedWord = word.substring(0, i);
         punctuation = true;
       }
       i++;
+
     }
 
     char letter = word.charAt(0);
-    char letter2 = word.charAt(1);
 
-    if (Character.isUpperCase(letter) && Character.isLowerCase(word.charAt(1))){
-      String firstLetter = String.valueOf(Character.toUpperCase(letter2));
-      String lastLetter = String.valueOf(Character.toLowerCase(letter));
-      convertedWord = firstLetter + convertedWord.substring(2) + lastLetter + "ay";
+    if (vowels.indexOf(convertedWord.substring(1,2))<= 0 && vowels.indexOf(convertedWord.substring(0,1)) <= 0){
+      System.out.println("helo");
+      for (int x = 0; x < convertedWord.length(); x++){
+         if (vowels.indexOf(convertedWord.substring(x, x+1))>=0){
+            String left = convertedWord.substring ( 0,x);
+            left = String.valueOf(Character.toLowerCase(left.charAt(0))) + left.substring(1);
+            String right = convertedWord.substring (x, convertedWord.length());
+            convertedWord = right+left;
+         }
+      }
+      System.out.println(convertedWord);
+
+    }
+    
+    
+    if (Character.isUpperCase(letter) && Character.isLowerCase(convertedWord.charAt(1))){
+      String firstLetter = String.valueOf(Character.toUpperCase(convertedWord.charAt(0)));
+      if (vowels.indexOf(word.substring(0,1))>=0){
+        convertedWord = firstLetter + convertedWord.substring(1) + "yay";
+      }
+      else {
+          convertedWord = firstLetter + convertedWord.substring(1) + "ay";       
+      }
+
     }
     else if (Character.isUpperCase(word.charAt(1))){
       convertedWord = convertedWord.substring(1) + letter + "AY";
-    } // use AY
+    }
     else {
       convertedWord = convertedWord.substring(1) + letter + "ay";
     }
 
-    return convertedWord + word.substring(i-1, word.length());
+    if (punctuationString.indexOf(word.substring(word.length()-1))>=0){
+      return convertedWord + word.substring(i-1, word.length());
+    }
+    else{
+      return convertedWord;
+    }
   }
 
   public String translateSentence(String sentence)
   {
     String retSentence = "";
+    String space = " ";
+    String word = "";
+    int count = 0;
 
+    for (int i = 0; i < sentence.length()-1; i++){
+      if (space.indexOf(sentence.substring(i, i+1)) >=0){
+        word = sentence.substring(count, i);
+        count = i+1;
+
+        word = translateWord(word); 
+        retSentence = retSentence +  word + " "; // "is" returns as "siay" instead of "isay", missing last word
+      }
+    }
 
     return retSentence;
   }

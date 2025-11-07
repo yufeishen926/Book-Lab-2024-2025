@@ -66,34 +66,56 @@ public class Book
     }
 
     char letter = word.charAt(0);
+    String left = "";
 
-    if (vowels.indexOf(convertedWord.substring(1,2))<= 0 && vowels.indexOf(convertedWord.substring(0,1)) <= 0){
-      System.out.println("helo");
-      for (int x = 0; x < convertedWord.length(); x++){
-         if (vowels.indexOf(convertedWord.substring(x, x+1))>=0){
-            String left = convertedWord.substring ( 0,x);
+    if (vowels.indexOf(convertedWord.substring(0,1)) <= 0 && vowels.indexOf(convertedWord.substring(1,2))<= 0){
+
+         if (vowels.indexOf(convertedWord.substring(2, 3))>=0){
+            left = convertedWord.substring ( 0,2);
+            
             left = String.valueOf(Character.toLowerCase(left.charAt(0))) + left.substring(1);
-            String right = convertedWord.substring (x, convertedWord.length());
+            
+            String right = convertedWord.substring (2, convertedWord.length());
+            
+            convertedWord = right+left;
+
+         }
+         else if (vowels.indexOf(convertedWord.substring(2, 3))<0){
+            left = convertedWord.substring ( 0,3); // school returns oolschhay with double h
+            
+            left = String.valueOf(Character.toLowerCase(left.charAt(0))) + left.substring(1);
+            
+            String right = convertedWord.substring (2, convertedWord.length());
+            
             convertedWord = right+left;
          }
-      }
-      System.out.println(convertedWord);
+      
 
     }
     
     
-    if (Character.isUpperCase(letter) && Character.isLowerCase(convertedWord.charAt(1))){
-      String firstLetter = String.valueOf(Character.toUpperCase(convertedWord.charAt(0)));
+    if (Character.isUpperCase(letter) && convertedWord.length() > 1 && Character.isLowerCase(convertedWord.charAt(1))){
+      String firstLetter = String.valueOf(Character.toLowerCase(convertedWord.charAt(0)));
+      String secondLetter = String.valueOf(Character.toUpperCase(convertedWord.charAt(1)));
       if (vowels.indexOf(word.substring(0,1))>=0){
-        convertedWord = firstLetter + convertedWord.substring(1) + "yay";
+        convertedWord = secondLetter + convertedWord.substring(2) + firstLetter + "yay";
       }
       else {
-          convertedWord = firstLetter + convertedWord.substring(1) + "ay";       
+          convertedWord = secondLetter + convertedWord.substring(2) + firstLetter + "ay";       
       }
 
+    }
+    else if (vowels.indexOf(convertedWord.substring(0, 1)) >= 0 && left.length() == 0){
+      convertedWord = convertedWord + "yay";
+    }
+    else if (convertedWord.length() == 1){
+      convertedWord = convertedWord + "ay";
     }
     else if (Character.isUpperCase(word.charAt(1))){
       convertedWord = convertedWord.substring(1) + letter + "AY";
+    }
+    else if (left.length() == 2){
+      convertedWord = convertedWord + "ay";
     }
     else {
       convertedWord = convertedWord.substring(1) + letter + "ay";
@@ -110,19 +132,23 @@ public class Book
   public String translateSentence(String sentence)
   {
     String retSentence = "";
-    String space = " ";
     String word = "";
     int count = 0;
 
-    for (int i = 0; i < sentence.length()-1; i++){
-      if (space.indexOf(sentence.substring(i, i+1)) >=0){
-        word = sentence.substring(count, i);
-        count = i+1;
+    int space = sentence.indexOf(" ");
 
-        word = translateWord(word); 
-        retSentence = retSentence +  word + " "; // "is" returns as "siay" instead of "isay", missing last word
-      }
+    while (space >=0){
+        word = sentence.substring(0, space);
+        word = translateWord(word);
+        retSentence = retSentence + word + " ";
+        sentence = sentence.substring(space + 1);
+        space = sentence.indexOf(" ");
     }
+    if (sentence.length() > 0){
+      word = translateWord(sentence);
+      retSentence = retSentence + word + " ";
+    }
+    
 
     return retSentence;
   }

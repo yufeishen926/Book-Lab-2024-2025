@@ -4,11 +4,44 @@
 //There can be punctuation in a word, we will only add/keep punctuation at the end of a string if it is at the end of a string.
 //    for examples: Hello.==> Ellohay.    Good-bye! ==> Ood-byegay!    so... ==> osay...
 
+
+import java.util.Scanner;
+import java.io.IOException;
+import java.net.URL;
+
 public class Book
 {
+
+  public String book;
+
+  public Book(String url){
+    readBook(url);
+  }
+
+  private void readBook(String link){
+    try {
+      URL url = new URL(link);
+      Scanner s = new Scanner(url.openStream());
+
+      while(s.hasNext()){
+        String text = s.nextLine();
+        System.out.println(text);
+        book += text;
+      }
+      s.close();
+    }
+    catch(IOException ex){
+      ex.printStackTrace();
+    }
+
+  }
+
+  public String getText(){
+    return book;
+  }
+
   public String pigLatin(String word)
   {
-    String newWord = "";
       String vowel = "aeiouy";
       String numbers = "1234567890";
       if(word.length()==0){
@@ -46,8 +79,9 @@ public class Book
   public String translateWord(String word)    //to share with class
   {
     String convertedWord = "";
-    String punctuationString = ".?!,;";
+    String punctuationString = ".?!,;:";
     String vowels = " aeiouyAEIOUY";
+    String bracket = "[";
 
     boolean punctuation = false;
     int i = 0;
@@ -65,6 +99,16 @@ public class Book
 
     }
 
+    System.out.println(convertedWord);
+
+    if(convertedWord.length()==0){
+         return convertedWord;
+      }
+
+    if (bracket.equals(convertedWord.substring(0, 1))){
+      return convertedWord;
+    }
+    
     char letter = word.charAt(0);
     String left = "";
 
@@ -152,4 +196,13 @@ public class Book
 
     return retSentence;
   }
+
+  public String translateBook(String book){
+    String translatedBook = "";
+
+    translatedBook += translateSentence(book);
+
+    return translatedBook;
+  }
+
 }

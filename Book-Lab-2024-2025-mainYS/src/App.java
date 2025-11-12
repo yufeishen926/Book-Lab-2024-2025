@@ -1,11 +1,12 @@
 class App {
   public static void main(String[] args) {
-    Book aBook = new Book();
-   // System.out.println(aBook.pigLatin("what"));
-  // System.out.println(aBook.translateWord("can"));
-    //System.out.println(aBook.translateWord("What?!?"));
-   // System.out.println(aBook.translateWord("Allons-y"));
-   System.out.println(aBook.translateSentence("I can now speak in Pig-Latin? WOW!!! I can translate words and sentences for the students at Foothill High School."));
- // System.out.println(aBook.translateSentence("speak"));
+    Book aBook = new Book("https://www.gutenberg.org/cache/epub/6130/pg6130.txt");
+    String bookWords = aBook.getText();
+   // System.out.println(bookWords);
+
+  System.out.println(aBook.translateBook(bookWords));
+
+
+
   }
 }
